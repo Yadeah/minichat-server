@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yadeah.minichat.mapper.AccountMapper">
+    <insert id="insert">
+        insert into account (account_id, account_type, account, mobile, password, account_status, username)
+        select #{account.account_id}, #{account.account_type}, #{account.account}, #{account.mobile}, #{account.password}, #{account.account_status}, #{account.username}
+        from dual
+        where not exists (
+            select *
+            from account ta
+            where
+                <if test="account.account != null">ta.account = #{account.account}</if>
+                <if test="account.mobile != null">ta.mobile = #{account.mobile}</if>
+        )
+    </insert>
+
+    <select id="selectAccountModelByAccountIdOrAccountOrMobileOrEmail"
+            resultType="com.yadeah.minichat.common.model.AccountModel"></select>
+    <select id="selectAccountModelByPassword" resultType="com.yadeah.minichat.common.model.AccountModel"></select>
+    <select id="selectAccountModelsByAccountOrMobileOrEmail"
+            resultType="com.yadeah.minichat.common.model.AccountModel"></select>
+</mapper>
